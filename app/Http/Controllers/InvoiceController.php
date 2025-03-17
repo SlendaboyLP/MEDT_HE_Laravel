@@ -12,7 +12,9 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        return "Hello World";
+        return view("list-invoice", [
+            "data" => Invoice::all()
+        ]);
     }
 
     /**
@@ -36,7 +38,9 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        //
+        return view("show-invoice", [
+            "invoice" => $invoice
+        ]);
     }
 
     /**
@@ -44,7 +48,9 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        //
+        return view("edit-invoice", [
+            "invoice" => $invoice
+        ]);
     }
 
     /**
@@ -52,7 +58,9 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
-        //
+        $invoice->update($request->all());
+
+        return redirect()->route("invoice.index");
     }
 
     /**
