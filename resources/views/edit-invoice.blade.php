@@ -4,11 +4,11 @@
 
 @section('sidebar')
     @parent
-    <p>this is appended to the master sidebar.</p>
+    <h2>Edit Invoice {{$invoice->id}}</h2>
 @endsection
 
 @section('content')
-    <h1>Edit Invoice {{$invoice->id}}</h1>
+    
 
 
     <form action="{{ route('invoice.update', $invoice->id) }}" method="POST">
@@ -17,23 +17,28 @@
         <table>
 
             <tr>
+                <td>ID</td>
+                <td><input type="text" disabled name="id" value="{{ $invoice->id }}"></input></td>
+            </tr>
+
+            <tr>
                 <td>Name</td>
                 <td><input type="text" name="Name" value="{{ $invoice->Name }}"></input></td>
             </tr>
 
             <tr>
                 <td>PriceNet</td>
-                <td><input type="number" name="PriceNet" value="{{ $invoice->PriceNet }}"></input></td>
+                <td><input type="number" step="0.01"  name="PriceNet" value="{{ $invoice->PriceNet }}"></input></td>
             </tr>
 
             <tr>
                 <td>PriceGross</td>
-                <td><input type="number" name="PriceGross" value="{{ $invoice->PriceGross }}"></input></td>
+                <td><input type="number" step="0.01" name="PriceGross" value="{{ $invoice->PriceGross }}"></input></td>
             </tr>
 
             <tr>
                 <td>Vat</td>
-                <td><input type="number" name="Vat" value="{{ $invoice->Vat }}"></input></td>
+                <td><input type="number" step="0.01" name="Vat" value="{{ $invoice->Vat }}"></input></td>
             </tr>
 
             <tr>

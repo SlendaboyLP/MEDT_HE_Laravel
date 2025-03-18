@@ -18,8 +18,8 @@ return new class extends Migration
             $table->double('PriceNet');
             $table->double('PriceGross');
             $table->double('Vat');
-            $table->string('UserClearing');
-            $table->dateTime('ClearingDate');
+            $table->string('UserClearing')->nullable();
+            $table->dateTime('ClearingDate')->nullable();
 
         });
     }

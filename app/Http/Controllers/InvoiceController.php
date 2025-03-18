@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 
@@ -22,7 +23,7 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        //
+        return view("create-invoice");
     }
 
     /**
@@ -30,7 +31,18 @@ class InvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Invoice::create($request->all());
+
+        $invoice = new Invoice();
+        $invoice->Name = $request->Name;
+        $invoice->PriceNet = $request->PriceNet;
+        $invoice->PriceGross = $request->PriceGross;
+        $invoice->Vat = $request->Vat;
+        $invoice->UserClearing = null;
+        $invoice->ClearingDate = null;
+        $invoice->save();  
+
+        return redirect()->route('invoice.index')->with('success', 'Invoice created successfully');
     }
 
     /**
@@ -68,6 +80,18 @@ class InvoiceController extends Controller
      */
     public function destroy(Invoice $invoice)
     {
-        //
+        $invoice->delete();
+
+        return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully');
     }
+
+
+    public function GetInvoiceData(Request $request)
+{
+    $invoices = Invoice::all();
+
+    // return json_encode(array('data' => $invoices));
+    return datatables()->of(Invoice::all())->make(true);
+}
+
 }

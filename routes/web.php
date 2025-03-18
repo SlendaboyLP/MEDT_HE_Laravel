@@ -7,3 +7,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('invoice', InvoiceController::class);
+Route::post('/invoice/data', [InvoiceController::class, 'GetInvoiceData'])->name('invoice.data');

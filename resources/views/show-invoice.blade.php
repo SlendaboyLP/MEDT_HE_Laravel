@@ -4,11 +4,11 @@
 
 @section('sidebar')
     @parent
-    <p>this is appended to the master sidebar.</p>
+    <h2>View Invoice {{$invoice->id}}</h2>
 @endsection
 
 @section('content')
-    <h1>Invoice {{$invoice->id}}</h1>
+    
 
     <table>
             @foreach($invoice->getAttributes() as $key => $value)
