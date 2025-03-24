@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-    <button onclick="window.location='{{ route('invoice.create') }}'">Create</button>
+    <button class="btn btn-secondary" onclick="window.location='{{ route('invoice.create') }}'">Create</button>
 
     <div id="tables-container-1">
         <h3>Table 1</h3>
@@ -26,17 +26,18 @@
                         <td>{{$d->id}}</td>
                         <td>{{$d->Name}}</td>
                         <td>
-                            <button onclick="window.location='{{ route('invoice.show', $d) }}'">Show</button>
-                            <button onclick="window.location='{{ route('invoice.edit', $d) }}'">Edit</button>
+                            <button class="btn btn-secondary" onclick="window.location='{{ route('invoice.show', $d) }}'">Show</button>
+                            <button class="btn btn-secondary" onclick="window.location='{{ route('invoice.edit', $d) }}'">Edit</button>
                             <form action="{{ route('invoice.destroy', $d) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete the invoice {{$d->Name}}?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Delete</button>
+                                <button class="btn btn-secondary" type="submit">Delete</button>
                             </form>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
+                
             </table>
             
     </div>
@@ -47,7 +48,7 @@
    
     <div id="tables-container-2">
         <h3>Table 2</h3>
-        <table id="data-table-2">
+        <table id="data-table-2" class="display">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -55,6 +56,7 @@
                     <th>Actions</th>
                 </tr>
             </thead>
+
 
             <tbody>
 
@@ -68,14 +70,32 @@
 
     <div id="tables-container-3">
         <h3>Table 3</h3>
-        <table id="documentListTable">
+        <table id="documentListTable" class="display">
             <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Created At</th>
+                    <th>Clearing Date</th>
+                    <th>User Clearing</th>
+                    <th>Download</th>
+                    <th>Delete</th>
+                </tr>
             </thead>
+            <tfoot>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Created At</th>
+
+        </tr>
+    </tfoot>
 
             <tbody>
             </tbody>
         </table>
     </div>
+
 
 
 
@@ -95,7 +115,13 @@
         $('#table_data').DataTable({
             processing: true,
             searching: true,
-            ordering: true
+            ordering: true,
+            pageLength:5,
+            language: {
+                processing: '<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>', // Custom loading spinner
+                loadingRecords: "Loading data, please wait..." // Loading message
+            },
+            
         }); 
 
 
@@ -107,6 +133,11 @@
             // serverSide: true,
             ordering: true,
             searching: true,
+            language: {
+                processing: '<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div></div>', // Custom loading spinner
+                loadingRecords: "Loading data, please wait..." // Loading message
+            },
+            pageLength: 5,
             ajax: {
                 url: "{{ route('invoice.data') }}",
                 type: 'POST',
@@ -124,15 +155,17 @@
                     searchable: false,
                     render: function(data, type, row) {
                         return `
-                            <button onclick="window.location='${row.show_url}'">Show</button>
-                            <button onclick="window.location='${row.edit_url}'">Edit</button>
+                            <button class="btn btn-secondary" onclick="window.location='${row.show_url}'">Show</button>
+                            <button class="btn btn-secondary onclick="window.location='${row.edit_url}'">Edit</button>
                             <form action="${row.delete_url}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete the invoice ${row.Name}?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit">Delete</button>
+                                <button class="btn btn-secondary" type="submit">Delete</button>
                             </form>
                         `;
-                    }
+                    },
+
+                        
                 }
             ]
         });
@@ -145,58 +178,89 @@
                 "url": "{{ route('invoice.data') }}",
                 "type": "POST"
             },
-             columns: [
-                 {
-                     data: "Name"
-                 },
-                //  {
-                //      data: "created_at",
-                //      render: function(data, type, row) {
-                //          var day = moment(data);
-
-                //          if(!day.isValid())
-                //              return "";
-
-                //          return day.format("{{ isset($settings->DatetimeFormat) ? $settings->DatetimeFormat : "DD.MM.Y H:mm:ss" }}");
-                //      }
-                //  },
-                //  {
-                //      render: function(data, type, row) {
-                //          return '<button class="btn btn-secondary downloadDocument" data-id="'+row.id+'" title="Downloaden"><i class="fas fa-file-download"></i></button>';
-                //      },
-                //      class: "dt-center"
-                //  },
-                //  {
-                //      render: function(data, type, row) {
-                //          return '<button class="btn btn-secondary deleteDocument" type="button" data-id="'+row.id+'" title="Löschen"><i class="fas fa-minus"></i></button>';
-                //      },
-                //      class: "dt-center"
-                //  }
-             ],
-            //  columnDefs: [
-            //      {
-            //          "targets": [2,3],
-            //          "orderable": false
-            //      },
-            //                  {
-            //                      "targets": [9],
-            //                      "createdCell": function (td, cellData, rowData, row, col)
-            //                      {
-            //                          if (rowData.USER_FREIGABE1 !== null)
-            //                          {
-            //                              if(String(rowData.STATUS_FREIGABE1).toUpperCase().trim() == 'N')
-            //                                  $(td).css('background-color', 'LightCoral');
-            //                              else if(String(rowData.STATUS_FREIGABE1).toUpperCase().trim() == 'F')
-            //                                  $(td).css('background-color', 'LightGreen');
-            //                              else
-            //                                  $(td).css('background-color', 'Cornsilk ');
-            //                          }
-            //                      }
-            //                  },
-
-            //  ],
-             order: [[0, 'asc']],
-             autoWidth: false,
+            columns: [
+                {
+                    data: "id"
+                },
+                {
+                    data: "Name"
+                },
+                {
+                    data: "created_at",
+                    render: function(data, type, row) {
+                        if (type === 'display' && data) {
+                            const date = new Date(data);
+                            if (isNaN(date)) return data;
+                            return date.toLocaleDateString('de-DE'); // Format as dd.mm.yyyy
+                        }
+                        return data;
+                    }
+                },
+                {
+                    data: "ClearingDate",
+                    render: function(data, type, row) {
+                        if (type === 'display' && data) {
+                            const date = new Date(data);
+                            if (isNaN(date)) return data;
+                            return date.toLocaleDateString('de-DE'); // Format as dd.mm.yyyy
+                        }
+                        return data;
+                    }
+                },
+                {
+                    data: "UserClearing",
+                    createdCell: function(td, cellData, rowData, row, col) {
+                        if (!cellData || cellData.trim() === "") {
+                            $(td).css("background-color", "red"); // Set background to red if empty
+                        } else {
+                            $(td).css("background-color", "green"); // Set background to green if not empty
+                        }
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        return `    
+                            <button class="btn btn-secondary downloadDocument" data-id="${row.id}" title="Download">
+                                <i class="fas fa-file-download"></i> Download
+                            </button>
+                        `;
+                    },
+                    class: "dt-center"
+                },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        return `
+                            <button class="btn btn-secondary deleteDocument" type="button" data-id="${row.id}" title="Delete">
+                                <i class="fas fa-minus"></i> Delete
+                            </button>
+                        `;
+                    },
+                    class: "dt-center"
+                }
+            ],
+            pageLength: 5,
+            order: [[0, 'asc']],
+            autoWidth: false,
+            processing: true,
+            language: {
+                processing: '<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>',
+                loadingRecords: "Loading data, please wait..."
+            },
+            initComplete: function() {
+                // Add a search input for each column
+                this.api().columns().every(function() {
+                    var column = this;
+                    var input = $('<input type="text" placeholder="Search ' + $(column.header()).text() + '" />')
+                        .appendTo($(column.footer()).empty())
+                        .on('keyup change clear', function() {
+                            if (column.search() !== this.value) {
+                                column.search(this.value).draw();
+                            }
+                        });
+                });
+            }
         });
     });
 </script>
