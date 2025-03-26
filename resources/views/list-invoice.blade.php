@@ -157,7 +157,7 @@
                         return `
                             <button class="btn btn-secondary" onclick="window.location='${row.show_url}'">Show</button>
                             <button class="btn btn-secondary onclick="window.location='${row.edit_url}'">Edit</button>
-                            <form action="${row.delete_url}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete the invoice ${row.Name}?');">
+                            <form action="{{ route('invoice.destroy', $d) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete the invoice ${row.Name}?');">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-secondary" type="submit">Delete</button>
@@ -209,6 +209,9 @@
                 },
                 {
                     data: "UserClearing",
+                    render: function(data, type, row) {
+                        return data || "";
+                    },
                     createdCell: function(td, cellData, rowData, row, col) {
                         if (!cellData || cellData.trim() === "") {
                             $(td).css("background-color", "red"); // Set background to red if empty

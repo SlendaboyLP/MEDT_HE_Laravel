@@ -38,8 +38,8 @@ class InvoiceController extends Controller
         $invoice->PriceNet = $request->PriceNet;
         $invoice->PriceGross = $request->PriceGross;
         $invoice->Vat = $request->Vat;
-        $invoice->UserClearing = null;
-        $invoice->ClearingDate = null;
+        $invoice->UserClearing = $request->UserClearing;
+        $invoice->ClearingDate = $request->ClearingDate;
         $invoice->save();  
 
         return redirect()->route('invoice.index')->with('success', 'Invoice created successfully');
@@ -87,11 +87,11 @@ class InvoiceController extends Controller
 
 
     public function GetInvoiceData(Request $request)
-{
-    $invoices = Invoice::all();
+    {
+        $invoices = Invoice::all();
 
-    // return json_encode(array('data' => $invoices));
-    return datatables()->of(Invoice::all())->make(true);
-}
+        // return json_encode(array('data' => $invoices));
+        return datatables()->of(Invoice::all())->make(true);
+    }
 
 }

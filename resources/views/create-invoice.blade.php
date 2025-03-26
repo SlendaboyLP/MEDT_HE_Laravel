@@ -34,6 +34,11 @@
             </tr>
 
             <tr>
+                <td>UserClearing</td>
+                <td><input type="text" name="UserClearing" value="{{ old("UserClearing") }}"></td>
+            </tr>
+
+            <tr>
                 <td><input type="submit" value="Create"></td>
             </tr>
         </table>
